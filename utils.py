@@ -28,6 +28,14 @@ def get_index_components(index_code='399102'):
     stock_list = ak.index_stock_cons(index_code)["品种代码"].apply(ak.stock_a_code_to_symbol).apply(lambda s:s[:2]+'.'+s[2:]).values
     return np.unique(stock_list)
 
+"""
+获取当日中证指数成分股票列表
+    -- by akshare
+"""
+def get_csindex_components(index_code='931643'):
+    stock_list = ak.index_stock_cons_csindex(symbol=index_code)['成分券代码'].apply(ak.stock_a_code_to_symbol).apply(lambda s:s[:2]+'.'+s[2:]).values
+    return np.unique(stock_list)
+
 
 """
 获取股票列表的历史K线
