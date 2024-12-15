@@ -41,11 +41,11 @@ def get_csindex_components(index_code='931643'):
 获取股票列表的历史K线
     -- by baostock
 """
-def get_history_k(stock_list, stt_date, end_date, freq='d', adjust='1'):
+def get_history_k(stock_list, stt_date, end_date, freq='d', adjust='2', fields="date,code,open,high,low,close,preclose,volume,amount,adjustflag,turn,tradestatus,pctChg,peTTM,psTTM,pcfNcfTTM,pbMRQ,isST"):
     bs.login()
     output_list = []
     for stk in stock_list:
-        rs = bs.query_history_k_data_plus(stk, "date,code,open,high,low,close,preclose,volume,amount,adjustflag,turn,tradestatus,pctChg,peTTM,psTTM,pcfNcfTTM,pbMRQ,isST",
+        rs = bs.query_history_k_data_plus(stk, fields,
                 start_date=stt_date, end_date=end_date,
                 frequency=freq, adjustflag=adjust)
         data_list = []
@@ -78,6 +78,7 @@ def df_multi_merge(df_list, on_cols, how='left'):
 
 
 def get_rs_target(stock_list, year, quarter, target='profit'):
+    bs.login()
     if target == 'profit':
         api_query_target = bs.query_profit_data
     elif target == 'operation':
@@ -104,6 +105,7 @@ def get_rs_target(stock_list, year, quarter, target='profit'):
         while (rs_target.error_code == '0') & rs_target.next():
             target_list.append(rs_target.get_row_data())
         output_list.append(pd.DataFrame(target_list, columns=rs_target.fields))
+    bs.logout()
     return pd.concat(output_list)
 
 
